@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sentinel-2 Image Viewer</title>
+
+  <meta charset="utf-8"/>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+  <script src="https://unpkg.com/georaster/dist/georaster.browser.bundle.min.js"></script>
+  <script src="https://unpkg.com/georaster-layer-for-leaflet"></script>
+
+  <style>
+    html, body { height: 100%; margin: 0; padding: 0; }
+    #map { height: calc(100% - 50px); }
+    #toolbar {
+      height: 50px;
+      padding: 8px;
+      background: #eee;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+<div id="toolbar">
+  <label>Select Sentinel-2 Image:</label>
+  <select id="cog-select"></select>
+</div>
+
+<div id="map"></div>
+
+<script>
+  var map = L.map("map").setView([0, 0], 5);
+  let currentLayer = null;
+
+  async function loadCOGList() {
+    const res = await fetch("http://localhost:8000/cog");
+    const json = await res.json();
+
+    const select = document.getElementById("cog-select");
+
+    json.available_cogs.forEach(entry => {
+      const opt = document.createElement("option");
+      opt.textContent = entry;
+      select.appendChild(opt);
+    });
+
+    // auto-load the first COG
+    if (json.available_cogs.length > 0) {
+      // const cogUrl = `http://localhost:8000/cog/${json.available_cogs[0]}`;
+      // loadCOG(cogUrl);
+      loadTiles(json.available_cogs[0]);
+    }
+
+    select.addEventListener("change", (e) => {
+      // const cogUrl = `http://localhost:8000/cog/${e.target.value}`;
+      // loadCOG(cogUrl);
+      loadTiles(e.target.value);
+    });
+  }
+
+  async function loadTiles(cogId) {
+
+    if (currentLayer) {
+      currentLayer.remove();
+      map.removeLayer(currentLayer);
+    }
+    const pane = map.getPane("overlayPane");
+    if (pane) pane.innerHTML = "";
+
+    // Get STAC metadata
+    const stacUrl = `http://localhost:8000/stac/${cogId}`;
+    const res = await fetch(stacUrl);
+    const json = await res.json();
+
+    // Get  bounds
+    // bbox from EPSG:4326 to Leaflet bounds
+    const [minLon, minLat, maxLon, maxLat] = json.bbox;
+    const bounds = [
+      [minLat, minLon],
+      [maxLat, maxLon]
+    ];
+
+    // Set map bounds
+    map.setMaxBounds(bounds);
+    map.fitBounds(bounds);
+
+    currentLayer = L.tileLayer(`http://localhost:8000/tiles/${cogId}/{z}/{x}/{y}.png`, {
+      tileSize: 256,
+      attribution: 'COG Tiles',
+      bounds: bounds,
+    });
+    currentLayer.addTo(map);
+    
+    map.invalidateSize(true);
+  }
+
+  loadCOGList();
+</script>
+
+</body>
+</html>

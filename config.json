@@ -1,0 +1,6 @@
+{
+    "sentinelhub": {
+        "client_id": "SENTINELHUB_CLIENT_ID",
+        "client_secret": "SENTINELHUB_CLIENT_SECRET"
+    }
+}
