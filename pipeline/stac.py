@@ -19,7 +19,7 @@ def get_bbox_and_footprint(wkt_str):
 
 def build_stac_item(cog_path):
     
-    with open(cog_path / ".metadata.json", "r") as file:
+    with open(cog_path.parent / ".metadata.json", "r") as file:
         metadata = json.load(file)
         
     bbox, footprint = get_bbox_and_footprint(metadata["bbox"])
@@ -33,14 +33,11 @@ def build_stac_item(cog_path):
     )
 
     asset = pystac.Asset(
-        href=cog_path / (cog_path.stem + "_cog.tiff"),
+        href=str(cog_path),
         media_type=pystac.MediaType.COG,
         roles=["data"]
     )
     item.add_asset("cog", asset)
-
-    # item_path = cog_path / f"{cog_path.stem}.json"
-    # item.save_object(dest_href=item_path)
 
     return item
 
@@ -51,8 +48,8 @@ def create_stac_catalog(datapath: Path = PROCESSED_DATA_PATH):
         description="STAC catalog for Sentinel-2 COGs",
         title="Sentinel-2 COG Catalog",
     )
-
-    cog_dirs = datapath.glob("*")
+    
+    cog_dirs = datapath.glob("*/*.tiff")
     for cog_dir in cog_dirs:
         item = build_stac_item(cog_dir)
         catalog.add_item(item)
