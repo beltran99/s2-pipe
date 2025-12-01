@@ -51,14 +51,10 @@
 
     // auto-load the first COG
     if (json.available_cogs.length > 0) {
-      // const cogUrl = `http://localhost:8000/cog/${json.available_cogs[0]}`;
-      // loadCOG(cogUrl);
       loadTiles(json.available_cogs[0]);
     }
 
     select.addEventListener("change", (e) => {
-      // const cogUrl = `http://localhost:8000/cog/${e.target.value}`;
-      // loadCOG(cogUrl);
       loadTiles(e.target.value);
     });
   }
