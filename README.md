@@ -1,4 +1,18 @@
 # s2-pipe
+This project provides a lightweight FastAPI backend and visualization pipeline for Sentinel-2 Cloud-Optimized GeoTIFFs (COGs), built as a hands-on introduction to modern geospatial tooling and web-based raster delivery.
+
+It allows to load, process, and serve geospatial data efficiently using Python, while also offering a simple browser-based viewer for inspection and interaction.
+
+The main goal of the project is to become familiar with contemporary geospatial software tools and standards, such as:
+- Cloud-Optimized GeoTIFFs (COGs)
+- Tile-based raster delivery: Leaflet JS
+- SpatioTemporal Asset Catalogs (STAC) standard
+- Python geospatial libraries
+  - rasterio
+  - rio-tiler
+  - rio-cogeo
+  - sentinelhub
+  - pystac
 
 ## Prerequisites
 - Python 3.12.3
@@ -9,6 +23,7 @@
 - Translation into Cloud-Optimized GeoTIFF (COG)
 - STAC Item publishing and catalog creation
 - Serve via lightweight REST API
+- Dynamic generation of XYZ tiles
 - Display in minimal browser-based viewer
 
 ## Setting up
