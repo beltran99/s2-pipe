@@ -1,4 +1,4 @@
-# s2-pipe
+# Sentinel-2 Pipeline
 This project provides a lightweight FastAPI backend and visualization pipeline for Sentinel-2 Cloud-Optimized GeoTIFFs (COGs), built as a hands-on introduction to modern geospatial tooling and web-based raster delivery.
 
 It allows to load, process, and serve geospatial data efficiently using Python, while also offering a simple browser-based viewer for inspection and interaction.
