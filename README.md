@@ -40,6 +40,8 @@ source env/bin/activate
 python3 -m pip install -r requirements.txt
 ```
 
+Setup a Sentinel Hub / Planet Insights Platform account [here](https://insights.planet.com/sign-up) and write your client credentials to [config.json](config.json). See this [tutorial](https://docs.sentinel-hub.com/api/latest/api/overview/authentication/) on how to obtain credentials. 
+
 Quick setup to download and process example data from Betsiboka Estuary
 ```bash
 python3 -m setup
@@ -52,7 +54,7 @@ Download additional Sentinel-2 images via CLI
 python3 -m pipeline.download --bbox <min_lat> <min_lon> <max_lat> <max_lon> --start-date <YYYY-MM-DD> --end-date <YYYY-MM-DD>
 ```
 
-Open source helper to find bounding boxes from a map: [bboxfinder.com](http://bboxfinder.com/#0.000000,0.000000,0.000000,0.000000).
+If you need inspiration, you can check out this open source helper to find bounding boxes from a map: [bboxfinder.com](http://bboxfinder.com/#0.000000,0.000000,0.000000,0.000000).
 
 All downloaded images must be processed for conversion to COG and STAC catalog must be updated
 ```bash
